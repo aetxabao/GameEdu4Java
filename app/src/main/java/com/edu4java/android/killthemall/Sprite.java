@@ -12,7 +12,7 @@ public class Sprite {
     int[] DIR = {3, 1, 0, 2};
     private static final int BMP_ROWS = 4;
     private static final int BMP_COLS = 3;
-    private int XSPEED = 5;
+    private int MAX_SPEED = 5;
     private int ZOOM = 2;
 
     private int x = 0;
@@ -32,8 +32,8 @@ public class Sprite {
         this.width = bmp.getWidth() / BMP_COLS;
         this.height = bmp.getHeight() / BMP_ROWS;
         Random rnd = new Random();
-        xSpeed = rnd.nextInt(20) - 10;
-        ySpeed = rnd.nextInt(20) - 10;
+        xSpeed = rnd.nextInt(MAX_SPEED*2) - MAX_SPEED;
+        ySpeed = rnd.nextInt(MAX_SPEED*2) - MAX_SPEED;
     }
 
     private void update() {
@@ -63,6 +63,10 @@ public class Sprite {
         double dirDouble = (Math.atan2(xSpeed, ySpeed) / (Math.PI / 2) + 2);
         int dir = (int)Math.round(dirDouble) % BMP_ROWS;
         return DIR[dir];
+    }
+
+    public boolean isCollition(float x2, float y2){
+        return x2 > x && x2 < x + ZOOM*width && y2 > y && y2 < y + ZOOM*height;
     }
 
 }

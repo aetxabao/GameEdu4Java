@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameLoopThread thread;
     private List<Sprite> sprites = new ArrayList<Sprite>();
+    private long lastClick;
 
     public GameView(Context context) {
         super(context);
@@ -65,6 +67,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for(Sprite sprite : sprites){
             sprite.onDraw(canvas);
         }
+    }
+
+    public boolean onTouchEvent(MotionEvent event){
+        if (System.currentTimeMillis() - lastClick > 500){
+            lastClick = System.currentTimeMillis();
+            synchronized (getHolder()) {
+                for(int i=sprites.size()-1; i>=0; i--){
+                    Sprite sprite = sprites.get(i);
+                    if (sprite.isCollition(event.getX(),event.getY())){
+                        sprites.remove(sprite);
+                        break;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
