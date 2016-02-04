@@ -1,5 +1,6 @@
 package com.edu4java.android.killthemall;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -36,6 +37,11 @@ public class Sprite {
         ySpeed = rnd.nextInt(MAX_SPEED*2) - MAX_SPEED;
     }
 
+    public void setPos(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
     private void update() {
         if (x > canvas.getWidth() - ZOOM*width - xSpeed || x + xSpeed < 0) {
             xSpeed = -xSpeed;
@@ -48,6 +54,7 @@ public class Sprite {
         currentFrame = ++currentFrame % BMP_COLS;
     }
 
+    @SuppressLint("DrawAllocation")
     public void onDraw(Canvas canvas) {
         update();
         int srcX = currentFrame * width;
