@@ -61,7 +61,6 @@ public class GameLoopThread extends Thread {
             } catch (Exception e) {
             }
         }
-
         Log.d("GameLoopThread", "running=" + running);
     }
 }
