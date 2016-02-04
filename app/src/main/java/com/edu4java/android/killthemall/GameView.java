@@ -9,20 +9,36 @@ import android.graphics.Color;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressLint("WrongCall")
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-    private Bitmap bmp;
     private GameLoopThread thread;
-    private Sprite sprite;
+    private List<Sprite> sprites = new ArrayList<Sprite>();
 
     public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.stu0);
-        sprite = new Sprite(this,bmp);
+    }
+
+    private void createSprites(){
+        sprites.add(createSprite(R.drawable.stu0));
+        sprites.add(createSprite(R.drawable.stu1));
+        sprites.add(createSprite(R.drawable.stu2));
+        sprites.add(createSprite(R.drawable.stu3));
+        sprites.add(createSprite(R.drawable.stu4));
+    }
+
+    private Sprite createSprite(int resource){
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
+        return new Sprite(this,bmp);
     }
 
     public void startGame() {
+        if (sprites.size() == 0){
+            createSprites();
+        }
         if (thread == null) {
             thread = new GameLoopThread(this);
             thread.startThread();
@@ -46,7 +62,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
-        sprite.onDraw(canvas);
+        for(Sprite sprite : sprites){
+            sprite.onDraw(canvas);
+        }
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
